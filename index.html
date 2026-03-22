@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RSVP – Jhune Carlo & Kristel Angeline | May 23, 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --sage: #7a9b76;
+    --sage-light: #c4d4c2;
+    --sage-dark: #4e6b4a;
+    --cream: #f5f0e8;
+    --cream-deep: #ede5d4;
+    --rose: #b08a80;
+    --rose-light: #d4b5ad;
+    --text-dark: #3a3228;
+    --text-mid: #7a6e64;
+    --text-light: #a89e94;
+    --gold: #c9a96e;
+  }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    background: var(--sage-dark);
+    padding: 64px 24px 72px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 30%, rgba(160,200,155,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 70%, rgba(176,138,128,0.15) 0%, transparent 70%);
+  }
+
+  .hero-ornament {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    color: var(--sage-light);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    display: block;
+    position: relative;
+  }
+
+  .hero-ornament::before,
+  .hero-ornament::after {
+    content: '—';
+    margin: 0 10px;
+    opacity: 0.5;
+  }
+
+  .hero-names {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(38px, 7vw, 62px);
+    font-weight: 300;
+    color: #f0ebe0;
+    line-height: 1.15;
+    position: relative;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-names .amp {
+    font-style: italic;
+    color: var(--rose-light);
+    font-size: 0.7em;
+    display: block;
+    font-weight: 300;
+    margin: 4px 0;
+  }
+
+  .hero-date {
+    position: relative;
+    margin-top: 28px;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    color: var(--sage-light);
+    text-transform: uppercase;
+    font-weight: 300;
+  }
+
+  .hero-line {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.6;
+    margin: 20px auto 0;
+    display: block;
+  }
+
+  /* DETAILS STRIP */
+  .details-strip {
+    background: var(--cream-deep);
+    border-top: 1px solid rgba(122,155,118,0.2);
+    border-bottom: 1px solid rgba(122,155,118,0.2);
+    padding: 28px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px 40px;
+  }
+
+  .detail-item {
+    text-align: center;
+  }
+
+  .detail-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 5px;
+    font-weight: 500;
+  }
+
+  .detail-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    color: var(--text-dark);
+    font-weight: 400;
+    line-height: 1.35;
+  }
+
+  /* MAIN */
+  .form-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 52px 24px 64px;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 300;
+    text-align: center;
+    color: var(--sage-dark);
+    margin-bottom: 8px;
+    letter-spacing: 0.03em;
+  }
+
+  .section-sub {
+    font-size: 13px;
+    text-align: center;
+    color: var(--text-mid);
+    margin-bottom: 36px;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .field-row {
+    margin-bottom: 22px;
+  }
+
+  .field-row label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .field-row input,
+  .field-row select,
+  .field-row textarea {
+    width: 100%;
+    background: #fff;
+    border: 1px solid rgba(122,155,118,0.3);
+    border-radius: 4px;
+    padding: 12px 14px;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-dark);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .field-row input:focus,
+  .field-row select:focus,
+  .field-row textarea:focus {
+    border-color: var(--sage);
+    box-shadow: 0 0 0 3px rgba(122,155,118,0.12);
+  }
+
+  .field-row textarea {
+    resize: vertical;
+    min-height: 88px;
+    line-height: 1.6;
+  }
+
+  .select-wrap {
+    position: relative;
+  }
+
+  .select-wrap::after {
+    content: '';
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid var(--text-light);
+    pointer-events: none;
+  }
+
+  /* Attendance toggle */
+  .attend-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .attend-option {
+    position: relative;
+  }
+
+  .attend-option input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .attend-option label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    border: 1px solid rgba(122,155,118,0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    background: #fff;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .attend-option input:checked + label {
+    background: var(--sage-dark);
+    border-color: var(--sage-dark);
+    color: #f0ebe0;
+  }
+
+  .attend-icon {
+    font-size: 15px;
+  }
+
+  /* Divider */
+  .field-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(122,155,118,0.25), transparent);
+    margin: 28px 0;
+  }
+
+  /* Attire note */
+  .attire-note {
+    background: rgba(122,155,118,0.08);
+    border-left: 2px solid var(--sage);
+    border-radius: 0 4px 4px 0;
+    padding: 14px 16px;
+    margin-bottom: 28px;
+  }
+
+  .attire-note p {
+    font-size: 12.5px;
+    color: var(--text-mid);
+    line-height: 1.65;
+    font-weight: 300;
+  }
+
+  .attire-note strong {
+    color: var(--sage-dark);
+    font-weight: 500;
+  }
+
+  .swatches {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .swatch {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.08);
+  }
+
+  /* CTA */
+  .btn-submit {
+    width: 100%;
+    padding: 16px 24px;
+    background: var(--sage-dark);
+    color: #f0ebe0;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 8px;
+  }
+
+  .btn-submit:hover { background: #3d5539; }
+  .btn-submit:active { transform: scale(0.99); }
+
+  .form-note {
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--text-light);
+    margin-top: 14px;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* Footer */
+  .footer {
+    background: var(--sage-dark);
+    padding: 28px 24px;
+    text-align: center;
+  }
+
+  .footer p {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--sage-light);
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="hero-ornament">You are cordially invited</span>
+  <div class="hero-names">
+    Jhune Carlo
+    <span class="amp">&amp;</span>
+    Kristel Angeline
+  </div>
+  <p class="hero-date">Saturday &middot; May 23, 2026 &middot; 9:30 AM</p>
+  <span class="hero-line"></span>
+</section>
+
+<!-- DETAILS -->
+<div class="details-strip">
+  <div class="detail-item">
+    <div class="detail-label">Ceremony</div>
+    <div class="detail-value">
+      Minor Basilica of the<br>Immaculate Conception<br>
+      <span style="font-size:13px;color:var(--text-mid)">M.H. Del Pilar St., Batangas City</span>
+    </div>
+  </div>
+  <div class="detail-item">
+    <div class="detail-label">Reception</div>
+    <div class="detail-value">
+      Narra Hall, 5F, Jose Rizal Bldg.<br>BatStateU – Pablo Borbon Campus<br>
+      <span style="font-size:13px;color:var(--text-mid)">Rizal Ave. Ext., Batangas City</span>
+    </div>
+  </div>
+  <div class="detail-item">
+    <div class="detail-label">RSVP Deadline</div>
+    <div class="detail-value">March 31, 2026</div>
+  </div>
+</div>
+
+<!-- FORM -->
+<main class="form-wrapper">
+  <h2 class="section-title">Kindly Reply</h2>
+  <p class="section-sub">
+    Your response means the world to us.<br>
+    Please fill out this form on or before <strong style="color:var(--rose);font-weight:400">March 31, 2026</strong>.
+  </p>
+
+  <!-- Attendance -->
+  <div class="field-row">
+    <label>Will you be joining us?</label>
+    <div class="attend-group">
+      <div class="attend-option">
+        <input type="radio" name="attendance" id="yes" value="yes" checked>
+        <label for="yes"><span class="attend-icon">♡</span> Joyfully accepts</label>
+      </div>
+      <div class="attend-option">
+        <input type="radio" name="attendance" id="no" value="no">
+        <label for="no"><span class="attend-icon">◌</span> Regretfully declines</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Name -->
+  <div class="field-row">
+    <label>Full Name</label>
+    <input type="text" id="guestName" placeholder="As it appears on your invitation" />
+  </div>
+
+  <!-- Seats -->
+  <div class="field-row" id="seatsField">
+    <label>Number of Guests Attending</label>
+    <div class="select-wrap">
+      <select id="seats">
+        <option value="">— Please select —</option>
+        <option value="1">1 guest</option>
+        <option value="2">2 guests</option>
+        <option value="3">3 guests</option>
+        <option value="4">4 guests</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field-divider"></div>
+
+  <!-- Attire reminder -->
+  <div class="attire-note">
+    <p>
+      <strong>Strictly Formal attire.</strong> Modern Filipiniana for the ladies; Barong Tagalog &amp; black slacks for the gentlemen.
+      <br><br>
+      Kindly refrain from wearing white — this color is reserved exclusively for the bride.
+    </p>
+    <div class="swatches">
+      <div class="swatch" style="background:#6b8f67"></div>
+      <div class="swatch" style="background:#9db89a"></div>
+      <div class="swatch" style="background:#9c7e78"></div>
+      <div class="swatch" style="background:#c4a08a"></div>
+      <div class="swatch" style="background:#d9b89a"></div>
+    </div>
+  </div>
+
+  <button class="btn-submit" onclick="handleSubmit()">Send My RSVP</button>
+
+  <p class="form-note">
+    Your presence means so much to us.<br>
+    Should you have any questions, please reach out to the entourage.
+  </p>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p>Jhune Carlo &amp; Kristel Angeline &middot; May 23, 2026 &middot; Batangas City</p>
+</footer>
+
+<script>
+  // Hide/show seats based on attendance
+  document.querySelectorAll('input[name="attendance"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      document.getElementById('seatsField').style.display = this.value === 'yes' ? 'block' : 'none';
+    });
+  });
+
+  function handleSubmit() {
+    var name = document.getElementById('guestName').value.trim();
+    if (!name) {
+      var nameInput = document.getElementById('guestName');
+      nameInput.focus();
+      nameInput.style.borderColor = '#c07070';
+      nameInput.addEventListener('input', function() {
+        nameInput.style.borderColor = '';
+      }, { once: true });
+      return;
+    }
+    // Redirect to Google Form
+    window.location.href = 'https://docs.google.com/forms/d/e/1FAIpQLScOfAS3WjvuOH2uEPmqOFvQhG0LGJn9c0wStVpJqZ6J_FEobQ/viewform?usp=dialog';
+  }
+</script>
+
+</body>
+</html>
