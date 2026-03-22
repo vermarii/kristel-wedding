@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
   :root {
     --sage: #7a9b76;
     --sage-light: #c4d4c2;
@@ -21,23 +21,129 @@
     --text-light: #a89e94;
     --gold: #c9a96e;
   }
-
+ 
   body {
     font-family: 'Jost', sans-serif;
     background: var(--cream);
     color: var(--text-dark);
     min-height: 100vh;
+    overflow-x: hidden;
   }
-
-  /* HERO */
+ 
+  /* ── MUSIC PLAYER ── */
+  .music-player {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(78, 107, 74, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(196, 212, 194, 0.25);
+    border-radius: 40px;
+    padding: 10px 16px 10px 12px;
+    box-shadow: 0 4px 24px rgba(58, 50, 40, 0.18);
+    transition: all 0.3s ease;
+  }
+ 
+  .music-player:hover {
+    background: rgba(78, 107, 74, 0.98);
+  }
+ 
+  .music-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid rgba(196, 212, 194, 0.4);
+    background: transparent;
+    color: var(--sage-light);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    padding: 0;
+    flex-shrink: 0;
+  }
+ 
+  .music-btn:hover {
+    background: rgba(196, 212, 194, 0.15);
+    border-color: rgba(196, 212, 194, 0.6);
+  }
+ 
+  .music-btn svg {
+    width: 13px;
+    height: 13px;
+    fill: var(--sage-light);
+  }
+ 
+  .music-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+ 
+  .music-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--sage-light);
+    opacity: 0.7;
+    white-space: nowrap;
+  }
+ 
+  .music-track {
+    font-size: 11px;
+    color: #f0ebe0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+    font-weight: 300;
+  }
+ 
+  /* Equalizer bars (animated when playing) */
+  .eq-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+ 
+  .eq-bar {
+    width: 2px;
+    background: var(--sage-light);
+    border-radius: 1px;
+    opacity: 0.7;
+    transform-origin: bottom;
+  }
+ 
+  .eq-bars.playing .eq-bar:nth-child(1) { animation: eq 0.8s ease-in-out infinite; }
+  .eq-bars.playing .eq-bar:nth-child(2) { animation: eq 0.6s ease-in-out infinite 0.1s; }
+  .eq-bars.playing .eq-bar:nth-child(3) { animation: eq 1.0s ease-in-out infinite 0.2s; }
+  .eq-bars.playing .eq-bar:nth-child(4) { animation: eq 0.7s ease-in-out infinite 0.05s; }
+ 
+  .eq-bars:not(.playing) .eq-bar { height: 3px; }
+ 
+  @keyframes eq {
+    0%, 100% { height: 3px; }
+    50% { height: 12px; }
+  }
+ 
+  /* ── HERO ── */
   .hero {
     position: relative;
     background: var(--sage-dark);
-    padding: 64px 24px 72px;
+    padding: 64px 24px 80px;
     text-align: center;
     overflow: hidden;
   }
-
+ 
   .hero::before {
     content: '';
     position: absolute;
@@ -46,7 +152,15 @@
       radial-gradient(ellipse 60% 50% at 20% 30%, rgba(160,200,155,0.18) 0%, transparent 70%),
       radial-gradient(ellipse 50% 40% at 80% 70%, rgba(176,138,128,0.15) 0%, transparent 70%);
   }
-
+ 
+  /* Botanical particles canvas */
+  #particles-canvas {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.35;
+  }
+ 
   .hero-ornament {
     font-family: 'Cormorant Garamond', serif;
     font-size: 13px;
@@ -56,16 +170,19 @@
     margin-bottom: 28px;
     display: block;
     position: relative;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeUp 1s ease forwards 0.3s;
   }
-
+ 
   .hero-ornament::before,
   .hero-ornament::after {
     content: '—';
     margin: 0 10px;
     opacity: 0.5;
   }
-
-  .hero-names {
+ 
+  .hero-name-1 {
     font-family: 'Cormorant Garamond', serif;
     font-size: clamp(38px, 7vw, 62px);
     font-weight: 300;
@@ -73,17 +190,39 @@
     line-height: 1.15;
     position: relative;
     letter-spacing: 0.02em;
+    display: block;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: fadeUp 1s ease forwards 0.7s;
   }
-
-  .hero-names .amp {
+ 
+  .hero-amp {
+    font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     color: var(--rose-light);
-    font-size: 0.7em;
+    font-size: clamp(26px, 5vw, 44px);
     display: block;
     font-weight: 300;
     margin: 4px 0;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: fadeUp 1s ease forwards 1.0s;
   }
-
+ 
+  .hero-name-2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(38px, 7vw, 62px);
+    font-weight: 300;
+    color: #f0ebe0;
+    line-height: 1.15;
+    position: relative;
+    letter-spacing: 0.02em;
+    display: block;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: fadeUp 1s ease forwards 1.2s;
+  }
+ 
   .hero-date {
     position: relative;
     margin-top: 28px;
@@ -92,18 +231,44 @@
     color: var(--sage-light);
     text-transform: uppercase;
     font-weight: 300;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 1.5s;
   }
-
+ 
+  /* Gold line drawing itself */
+  .hero-line-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 20px auto 0;
+    width: 60px;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeIn 0.1s ease forwards 1.8s;
+  }
+ 
   .hero-line {
     width: 60px;
     height: 1px;
     background: var(--gold);
-    opacity: 0.6;
-    margin: 20px auto 0;
-    display: block;
+    opacity: 0.7;
+    transform: scaleX(0);
+    transform-origin: left center;
+    animation: drawLine 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards 1.9s;
   }
-
-  /* DETAILS STRIP */
+ 
+  @keyframes drawLine {
+    to { transform: scaleX(1); }
+  }
+ 
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+ 
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+ 
+  /* ── DETAILS STRIP ── */
   .details-strip {
     background: var(--cream-deep);
     border-top: 1px solid rgba(122,155,118,0.2);
@@ -114,11 +279,11 @@
     justify-content: center;
     gap: 20px 40px;
   }
-
+ 
   .detail-item {
     text-align: center;
   }
-
+ 
   .detail-label {
     font-size: 10px;
     letter-spacing: 0.2em;
@@ -127,7 +292,7 @@
     margin-bottom: 5px;
     font-weight: 500;
   }
-
+ 
   .detail-value {
     font-family: 'Cormorant Garamond', serif;
     font-size: 16px;
@@ -135,14 +300,31 @@
     font-weight: 400;
     line-height: 1.35;
   }
-
-  /* MAIN */
+ 
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+ 
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+ 
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+ 
+  /* ── MAIN FORM ── */
   .form-wrapper {
     max-width: 600px;
     margin: 0 auto;
     padding: 52px 24px 64px;
   }
-
+ 
   .section-title {
     font-family: 'Cormorant Garamond', serif;
     font-size: 26px;
@@ -152,7 +334,7 @@
     margin-bottom: 8px;
     letter-spacing: 0.03em;
   }
-
+ 
   .section-sub {
     font-size: 13px;
     text-align: center;
@@ -161,11 +343,11 @@
     line-height: 1.6;
     font-weight: 300;
   }
-
+ 
   .field-row {
     margin-bottom: 22px;
   }
-
+ 
   .field-row label {
     display: block;
     font-size: 11px;
@@ -175,7 +357,8 @@
     margin-bottom: 8px;
     font-weight: 500;
   }
-
+ 
+  /* Bloom on focus */
   .field-row input,
   .field-row select,
   .field-row textarea {
@@ -189,28 +372,32 @@
     font-weight: 300;
     color: var(--text-dark);
     outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.2s ease;
     appearance: none;
     -webkit-appearance: none;
   }
-
+ 
   .field-row input:focus,
   .field-row select:focus,
   .field-row textarea:focus {
     border-color: var(--sage);
-    box-shadow: 0 0 0 3px rgba(122,155,118,0.12);
+    box-shadow:
+      0 0 0 3px rgba(122,155,118,0.12),
+      0 0 0 6px rgba(122,155,118,0.05),
+      0 0 0 10px rgba(122,155,118,0.02);
+    transform: translateY(-1px);
   }
-
+ 
   .field-row textarea {
     resize: vertical;
     min-height: 88px;
     line-height: 1.6;
   }
-
+ 
   .select-wrap {
     position: relative;
   }
-
+ 
   .select-wrap::after {
     content: '';
     position: absolute;
@@ -224,25 +411,25 @@
     border-top: 5px solid var(--text-light);
     pointer-events: none;
   }
-
+ 
   /* Attendance toggle */
   .attend-group {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
-
+ 
   .attend-option {
     position: relative;
   }
-
+ 
   .attend-option input {
     position: absolute;
     opacity: 0;
     width: 0;
     height: 0;
   }
-
+ 
   .attend-option label {
     display: flex;
     align-items: center;
@@ -257,27 +444,70 @@
     text-transform: uppercase;
     color: var(--text-mid);
     background: #fff;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
     user-select: none;
+    transform: translateY(0);
   }
-
+ 
+  .attend-option label:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(78,107,74,0.12);
+    border-color: rgba(122,155,118,0.5);
+  }
+ 
   .attend-option input:checked + label {
     background: var(--sage-dark);
     border-color: var(--sage-dark);
     color: #f0ebe0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(78,107,74,0.25);
   }
-
+ 
   .attend-icon {
     font-size: 15px;
   }
-
+ 
   /* Divider */
   .field-divider {
     height: 1px;
     background: linear-gradient(to right, transparent, rgba(122,155,118,0.25), transparent);
     margin: 28px 0;
   }
-
+ 
+  /* Section divider with drawing animation */
+  .drawn-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 32px 0;
+  }
+ 
+  .drawn-divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(201,169,110,0.4));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1s ease;
+  }
+ 
+  .drawn-divider-line.right {
+    background: linear-gradient(to left, transparent, rgba(201,169,110,0.4));
+    transform-origin: right;
+  }
+ 
+  .drawn-divider.visible .drawn-divider-line {
+    transform: scaleX(1);
+  }
+ 
+  .drawn-divider-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+    opacity: 0.5;
+  }
+ 
   /* Attire note */
   .attire-note {
     background: rgba(122,155,118,0.08);
@@ -286,32 +516,37 @@
     padding: 14px 16px;
     margin-bottom: 28px;
   }
-
+ 
   .attire-note p {
     font-size: 12.5px;
     color: var(--text-mid);
     line-height: 1.65;
     font-weight: 300;
   }
-
+ 
   .attire-note strong {
     color: var(--sage-dark);
     font-weight: 500;
   }
-
+ 
   .swatches {
     display: flex;
     gap: 6px;
     margin-top: 8px;
   }
-
+ 
   .swatch {
     width: 18px;
     height: 18px;
     border-radius: 50%;
     border: 1px solid rgba(0,0,0,0.08);
+    transition: transform 0.2s ease;
   }
-
+ 
+  .swatch:hover {
+    transform: scale(1.25);
+  }
+ 
   /* CTA */
   .btn-submit {
     width: 100%;
@@ -326,13 +561,38 @@
     letter-spacing: 0.22em;
     text-transform: uppercase;
     cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
+    transition: background 0.25s ease, transform 0.15s ease, box-shadow 0.25s ease;
     margin-top: 8px;
+    position: relative;
+    overflow: hidden;
   }
-
-  .btn-submit:hover { background: #3d5539; }
-  .btn-submit:active { transform: scale(0.99); }
-
+ 
+  .btn-submit::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(196,212,194,0.25) 0%, transparent 70%);
+    transform: scale(0);
+    opacity: 0;
+    transition: transform 0.6s ease, opacity 0.6s ease;
+    border-radius: 4px;
+  }
+ 
+  .btn-submit:hover {
+    background: #3d5539;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(78,107,74,0.3);
+  }
+ 
+  .btn-submit:hover::after {
+    transform: scale(2);
+    opacity: 1;
+  }
+ 
+  .btn-submit:active {
+    transform: scale(0.99) translateY(0);
+  }
+ 
   .form-note {
     text-align: center;
     font-size: 11.5px;
@@ -341,14 +601,14 @@
     font-weight: 300;
     line-height: 1.6;
   }
-
+ 
   /* Footer */
   .footer {
     background: var(--sage-dark);
     padding: 28px 24px;
     text-align: center;
   }
-
+ 
   .footer p {
     font-size: 11px;
     letter-spacing: 0.18em;
@@ -356,54 +616,84 @@
     text-transform: uppercase;
     opacity: 0.7;
   }
+ 
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 </style>
 </head>
 <body>
-
+ 
+<!-- MUSIC PLAYER -->
+<div class="music-player" id="musicPlayer">
+  <button class="music-btn" id="playBtn" onclick="togglePlay()" title="Play / Pause">
+    <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+  </button>
+  <div class="music-info">
+    <span class="music-label">Now playing</span>
+    <span class="music-track" id="trackName">Kristel Wedding 1</span>
+  </div>
+  <div class="eq-bars" id="eqBars">
+    <div class="eq-bar" style="height:3px"></div>
+    <div class="eq-bar" style="height:6px"></div>
+    <div class="eq-bar" style="height:3px"></div>
+    <div class="eq-bar" style="height:5px"></div>
+  </div>
+</div>
+ 
 <!-- HERO -->
 <section class="hero">
+  <canvas id="particles-canvas"></canvas>
+ 
   <span class="hero-ornament">You are cordially invited</span>
-  <div class="hero-names">
-    Jhune Carlo
-    <span class="amp">&amp;</span>
-    Kristel Angeline
-  </div>
+  <span class="hero-name-1">Jhune Carlo</span>
+  <span class="hero-amp">&amp;</span>
+  <span class="hero-name-2">Kristel Angeline</span>
   <p class="hero-date">Saturday &middot; May 23, 2026 &middot; 9:30 AM</p>
-  <span class="hero-line"></span>
+  <div class="hero-line-wrap">
+    <span class="hero-line"></span>
+  </div>
 </section>
-
+ 
 <!-- DETAILS -->
 <div class="details-strip">
-  <div class="detail-item">
+  <div class="detail-item reveal reveal-delay-1">
     <div class="detail-label">Ceremony</div>
     <div class="detail-value">
       Minor Basilica of the<br>Immaculate Conception<br>
       <span style="font-size:13px;color:var(--text-mid)">M.H. Del Pilar St., Batangas City</span>
     </div>
   </div>
-  <div class="detail-item">
+  <div class="detail-item reveal reveal-delay-2">
     <div class="detail-label">Reception</div>
     <div class="detail-value">
       Narra Hall, 5F, Jose Rizal Bldg.<br>BatStateU – Pablo Borbon Campus<br>
       <span style="font-size:13px;color:var(--text-mid)">Rizal Ave. Ext., Batangas City</span>
     </div>
   </div>
-  <div class="detail-item">
+  <div class="detail-item reveal reveal-delay-3">
     <div class="detail-label">RSVP Deadline</div>
     <div class="detail-value">March 31, 2026</div>
   </div>
 </div>
-
+ 
 <!-- FORM -->
 <main class="form-wrapper">
-  <h2 class="section-title">Kindly Reply</h2>
-  <p class="section-sub">
-    Your response means the world to us.<br>
-    Please fill out this form on or before <strong style="color:var(--rose);font-weight:400">March 31, 2026</strong>.
-  </p>
-
+ 
+  <div class="reveal">
+    <h2 class="section-title">Kindly Reply</h2>
+    <p class="section-sub">
+      Your response means the world to us.<br>
+      Please fill out this form on or before <strong style="color:var(--rose);font-weight:400">March 31, 2026</strong>.
+    </p>
+  </div>
+ 
   <!-- Attendance -->
-  <div class="field-row">
+  <div class="field-row reveal reveal-delay-1">
     <label>Will you be joining us?</label>
     <div class="attend-group">
       <div class="attend-option">
@@ -416,15 +706,15 @@
       </div>
     </div>
   </div>
-
+ 
   <!-- Name -->
-  <div class="field-row">
+  <div class="field-row reveal reveal-delay-2">
     <label>Full Name</label>
     <input type="text" id="guestName" placeholder="As it appears on your invitation" />
   </div>
-
+ 
   <!-- Seats -->
-  <div class="field-row" id="seatsField">
+  <div class="field-row reveal reveal-delay-3" id="seatsField">
     <label>Number of Guests Attending</label>
     <div class="select-wrap">
       <select id="seats">
@@ -436,11 +726,16 @@
       </select>
     </div>
   </div>
-
-  <div class="field-divider"></div>
-
+ 
+  <!-- Gold drawn divider -->
+  <div class="drawn-divider reveal">
+    <div class="drawn-divider-line"></div>
+    <div class="drawn-divider-dot"></div>
+    <div class="drawn-divider-line right"></div>
+  </div>
+ 
   <!-- Attire reminder -->
-  <div class="attire-note">
+  <div class="attire-note reveal">
     <p>
       <strong>Strictly Formal attire.</strong> Modern Filipiniana for the ladies; Barong Tagalog &amp; black slacks for the gentlemen.
       <br><br>
@@ -454,43 +749,192 @@
       <div class="swatch" style="background:#d9b89a"></div>
     </div>
   </div>
-
-  <button class="btn-submit" onclick="handleSubmit()">Send My RSVP</button>
-
-  <p class="form-note">
-    Your presence means so much to us.<br>
-    Should you have any questions, please reach out to the entourage.
-  </p>
+ 
+  <div class="reveal reveal-delay-1">
+    <button class="btn-submit" onclick="handleSubmit()">Send My RSVP</button>
+    <p class="form-note">
+      Your presence means so much to us.<br>
+      Should you have any questions, please reach out to the entourage.
+    </p>
+  </div>
+ 
 </main>
-
+ 
 <!-- FOOTER -->
 <footer class="footer">
   <p>Jhune Carlo &amp; Kristel Angeline &middot; May 23, 2026 &middot; Batangas City</p>
 </footer>
-
+ 
+<audio id="audioPlayer" preload="none"></audio>
+ 
 <script>
-  // Hide/show seats based on attendance
+  /* ── MUSIC ── */
+  var tracks = [
+    { file: 'Kristel Wedding 1.mp3', name: 'Kristel Wedding 1' },
+    { file: 'Kristel Wedding 2.mp3', name: 'Kristel Wedding 2' },
+    { file: 'Kristel Wedding 3.mp3', name: 'Kristel Wedding 3' },
+    { file: 'Kristel Wedding 5.mp3', name: 'Kristel Wedding 5' }
+  ];
+  var currentTrack = 0;
+  var isPlaying = false;
+  var audio = document.getElementById('audioPlayer');
+ 
+  var playIconSVG = '<path d="M8 5v14l11-7z"/>';
+  var pauseIconSVG = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+ 
+  function loadTrack(index) {
+    audio.src = tracks[index].file;
+    document.getElementById('trackName').textContent = tracks[index].name;
+  }
+ 
+  function togglePlay() {
+    if (isPlaying) {
+      audio.pause();
+      isPlaying = false;
+      document.getElementById('playIcon').innerHTML = playIconSVG;
+      document.getElementById('eqBars').classList.remove('playing');
+    } else {
+      if (!audio.src || audio.src === window.location.href) {
+        loadTrack(currentTrack);
+      }
+      audio.play().catch(function() {});
+      isPlaying = true;
+      document.getElementById('playIcon').innerHTML = pauseIconSVG;
+      document.getElementById('eqBars').classList.add('playing');
+    }
+  }
+ 
+  audio.addEventListener('ended', function() {
+    currentTrack = (currentTrack + 1) % tracks.length;
+    loadTrack(currentTrack);
+    audio.play().catch(function() {});
+    document.getElementById('trackName').textContent = tracks[currentTrack].name;
+  });
+ 
+  /* ── PARTICLES (drifting botanical leaves) ── */
+  (function() {
+    var canvas = document.getElementById('particles-canvas');
+    var hero = canvas.parentElement;
+    var ctx = canvas.getContext('2d');
+    var particles = [];
+    var count = 22;
+ 
+    function resize() {
+      canvas.width = hero.offsetWidth;
+      canvas.height = hero.offsetHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+ 
+    /* Leaf shapes: simple bezier paths drawn relative to origin */
+    function drawLeaf(ctx, size, rotation) {
+      ctx.save();
+      ctx.rotate(rotation);
+      ctx.beginPath();
+      ctx.moveTo(0, -size);
+      ctx.bezierCurveTo(size * 0.6, -size * 0.6, size * 0.6, size * 0.2, 0, size * 0.4);
+      ctx.bezierCurveTo(-size * 0.6, size * 0.2, -size * 0.6, -size * 0.6, 0, -size);
+      ctx.fill();
+      /* vein */
+      ctx.beginPath();
+      ctx.moveTo(0, -size * 0.9);
+      ctx.lineTo(0, size * 0.3);
+      ctx.stroke();
+      ctx.restore();
+    }
+ 
+    function drawPetal(ctx, size, rotation) {
+      ctx.save();
+      ctx.rotate(rotation);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, size * 0.4, size, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+ 
+    for (var i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * 1200,
+        y: Math.random() * -400 - 20,
+        size: Math.random() * 5 + 3,
+        speed: Math.random() * 0.4 + 0.15,
+        drift: Math.random() * 0.3 - 0.15,
+        rotation: Math.random() * Math.PI * 2,
+        rotSpeed: (Math.random() - 0.5) * 0.008,
+        opacity: Math.random() * 0.5 + 0.15,
+        type: Math.random() > 0.5 ? 'leaf' : 'petal',
+        color: Math.random() > 0.5 ? '#c4d4c2' : '#d4b5ad'
+      });
+    }
+ 
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(function(p) {
+        p.y += p.speed;
+        p.x += p.drift;
+        p.rotation += p.rotSpeed;
+        if (p.y > canvas.height + 20) {
+          p.y = -20;
+          p.x = Math.random() * canvas.width;
+        }
+        ctx.save();
+        ctx.globalAlpha = p.opacity;
+        ctx.fillStyle = p.color;
+        ctx.strokeStyle = p.color;
+        ctx.lineWidth = 0.5;
+        ctx.translate(p.x, p.y);
+        if (p.type === 'leaf') {
+          drawLeaf(ctx, p.size, p.rotation);
+        } else {
+          drawPetal(ctx, p.size, p.rotation);
+        }
+        ctx.restore();
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+  })();
+ 
+  /* ── SCROLL REVEAL ── */
+  var revealEls = document.querySelectorAll('.reveal');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        /* Also trigger drawn dividers */
+        if (entry.target.classList.contains('drawn-divider')) {
+          entry.target.classList.add('visible');
+        }
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+ 
+  revealEls.forEach(function(el) { observer.observe(el); });
+ 
+  /* ── ATTENDANCE TOGGLE ── */
   document.querySelectorAll('input[name="attendance"]').forEach(function(radio) {
     radio.addEventListener('change', function() {
       document.getElementById('seatsField').style.display = this.value === 'yes' ? 'block' : 'none';
     });
   });
-
+ 
+  /* ── SUBMIT ── */
   function handleSubmit() {
     var name = document.getElementById('guestName').value.trim();
     if (!name) {
       var nameInput = document.getElementById('guestName');
       nameInput.focus();
       nameInput.style.borderColor = '#c07070';
+      nameInput.style.boxShadow = '0 0 0 3px rgba(192,112,112,0.1)';
       nameInput.addEventListener('input', function() {
         nameInput.style.borderColor = '';
+        nameInput.style.boxShadow = '';
       }, { once: true });
       return;
     }
-    // Redirect to Google Form
     window.location.href = 'https://docs.google.com/forms/d/e/1FAIpQLScOfAS3WjvuOH2uEPmqOFvQhG0LGJn9c0wStVpJqZ6J_FEobQ/viewform?usp=dialog';
   }
 </script>
-
 </body>
 </html>
