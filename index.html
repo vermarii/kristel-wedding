@@ -396,8 +396,14 @@ var pl=false,audio=document.getElementById('ap');
 var pi='<path d="M8 5v14l11-7z"/>',pai='<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
 audio.src='sngsun.mp3';
 audio.loop=true;
+audio.muted=true;
 document.getElementById('tn').textContent='Our Song';
-function togglePlay(){if(pl){audio.pause();pl=false;document.getElementById('pi').innerHTML=pi;document.getElementById('eq').classList.remove('playing')}else{audio.play().catch(function(){});pl=true;document.getElementById('pi').innerHTML=pai;document.getElementById('eq').classList.add('playing')}}
+audio.play().catch(function(){});
+function unmute(){audio.muted=false;if(!pl){pl=true;document.getElementById('pi').innerHTML=pai;document.getElementById('eq').classList.add('playing')}document.removeEventListener('click',unmute);document.removeEventListener('touchstart',unmute);document.removeEventListener('scroll',unmute);}
+document.addEventListener('click',unmute);
+document.addEventListener('touchstart',unmute);
+document.addEventListener('scroll',unmute);
+function togglePlay(){if(pl){audio.pause();pl=false;document.getElementById('pi').innerHTML=pi;document.getElementById('eq').classList.remove('playing')}else{audio.muted=false;audio.play().catch(function(){});pl=true;document.getElementById('pi').innerHTML=pai;document.getElementById('eq').classList.add('playing')}}
 
 // HERO CANVAS
 (function(){var c=document.getElementById('pcanvas'),h=c.parentElement,ctx=c.getContext('2d'),pts=[];
