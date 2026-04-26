@@ -392,12 +392,12 @@ footer p{font-size:11px;letter-spacing:.2em;color:var(--sage-light);text-transfo
 <audio id="ap" preload="none"></audio>
 <script>
 // MUSIC
-var tracks=[{file:'Kristel Wedding 1.mp3',name:'Kristel Wedding 1'},{file:'Kristel Wedding 2.mp3',name:'Kristel Wedding 2'},{file:'Kristel Wedding 3.mp3',name:'Kristel Wedding 3'},{file:'Kristel Wedding 5.mp3',name:'Kristel Wedding 5'}];
-var cur=0,pl=false,audio=document.getElementById('ap');
+var pl=false,audio=document.getElementById('ap');
 var pi='<path d="M8 5v14l11-7z"/>',pai='<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-function lt(i){audio.src=tracks[i].file;document.getElementById('tn').textContent=tracks[i].name}
-function togglePlay(){if(pl){audio.pause();pl=false;document.getElementById('pi').innerHTML=pi;document.getElementById('eq').classList.remove('playing')}else{if(!audio.src||audio.src===window.location.href)lt(cur);audio.play().catch(function(){});pl=true;document.getElementById('pi').innerHTML=pai;document.getElementById('eq').classList.add('playing')}}
-audio.addEventListener('ended',function(){cur=(cur+1)%tracks.length;lt(cur);audio.play().catch(function(){})});
+audio.src='sngsun.mp3';
+audio.loop=true;
+document.getElementById('tn').textContent='Our Song';
+function togglePlay(){if(pl){audio.pause();pl=false;document.getElementById('pi').innerHTML=pi;document.getElementById('eq').classList.remove('playing')}else{audio.play().catch(function(){});pl=true;document.getElementById('pi').innerHTML=pai;document.getElementById('eq').classList.add('playing')}}
 
 // HERO CANVAS
 (function(){var c=document.getElementById('pcanvas'),h=c.parentElement,ctx=c.getContext('2d'),pts=[];
